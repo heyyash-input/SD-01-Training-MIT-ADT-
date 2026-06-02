@@ -12,11 +12,13 @@ public class Mini_Shop {
         System.out.println("3:book -> rs 15");
         System.out.println("4:Color Box -> 250");
 
-        int ch ;
+        int ch =0 ;
         double total = 0 ;
+
         System.out.println("Enter you choice");
         ch= sc.nextInt();
-   do {gi
+
+   do {
        System.out.println("You have Enter: " + ch);
        switch (ch) {
            case 1:
@@ -38,8 +40,6 @@ public class Mini_Shop {
            default:
                System.out.println("Invalid Input");
        }
-       System.out.println("-----Thank you for shopping-----");
-       break;
    }
     while(ch != 5);
 
