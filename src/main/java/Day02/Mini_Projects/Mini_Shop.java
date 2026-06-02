@@ -1,4 +1,4 @@
-package Day02.DataTypesFundamentals;
+package Day02.Mini_Projects;
 
 import java.util.Scanner;
 
@@ -16,7 +16,7 @@ public class Mini_Shop {
         double total = 0 ;
         System.out.println("Enter you choice");
         ch= sc.nextInt();
-   do {
+   do {gi
        System.out.println("You have Enter: " + ch);
        switch (ch) {
            case 1:
