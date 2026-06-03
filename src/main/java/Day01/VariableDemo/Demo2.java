@@ -4,6 +4,9 @@ import java.util.Scanner;
 
 public class Demo2 {
     public static void main(String[] args) {
+
+        //---------------------------------------------------------------------------------------------------------------
+
         Scanner sc = new Scanner(System.in);
 
         System.out.println("Student details");
@@ -33,5 +36,7 @@ public class Demo2 {
         System.out.println(rollno);
         System.out.println(name);
         System.out.println(age+" "+status+" "+ per + " " +ch );
+
+        //---------------------------------------------------------------------------------------------------------------
     }
 }

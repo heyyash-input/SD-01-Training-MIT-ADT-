@@ -4,10 +4,14 @@ import java.util.Scanner;
 
 public class Loops {
     public static void main(String[] args) {
+
+//---------------------------------------------------------------------------------------------------------------
+
         Scanner sc = new Scanner(System.in);
 //      While and for loop diff ?
 //        ans -> while loop is considered when we dont know how much to iterate,
                 // for loop we need
+//---------------------------------------------------------------------------------------------------------------
 
         System.out.println("---------------while------------");
 
@@ -17,11 +21,15 @@ public class Loops {
             i++;
         }
 
+//---------------------------------------------------------------------------------------------------------------
+
         System.out.println("----------------for------------");
 
         for (int j = 0; j <= 10 ; j++) {
             System.out.println(j);
         }
+
+//---------------------------------------------------------------------------------------------------------------
 
         System.out.println("------------First 10 even numbers---------");
 
@@ -30,6 +38,8 @@ public class Loops {
                 System.out.println(num);
             }
         }
+
+//---------------------------------------------------------------------------------------------------------------
 
         System.out.println("-----------addition using while loop----------");
 
@@ -41,6 +51,8 @@ public class Loops {
             sum += no;
             System.out.println("sum is:-" + sum);
         }
+
+//---------------------------------------------------------------------------------------------------------------
 
     }
 }

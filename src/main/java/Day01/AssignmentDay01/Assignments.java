@@ -3,6 +3,9 @@ package Day01.AssignmentDay01;
 import java.util.Scanner;
 
 public class Assignments {
+
+    //---------------------------------------------------------------------------------------------------------------
+
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
@@ -11,6 +14,8 @@ public class Assignments {
         // Elgibility Citizenship for voting:-
         LogicalOperator(sc);
     }
+
+    //---------------------------------------------------------------------------------------------------------------
 
     public static void Calculator(Scanner sc , int num1 , int num2 ){
         System.out.println("Enter first number");
@@ -24,6 +29,8 @@ public class Assignments {
         System.out.println("Substraction:-" + add);
         System.out.println("substraction:-" + subs);
     }
+
+    //---------------------------------------------------------------------------------------------------------------
 
     public static void LogicalOperator(Scanner sc ){
         System.out.println("Logical Operator");
@@ -48,4 +55,6 @@ public class Assignments {
             System.out.println("Not valid ");
         }
     }
+
+    //---------------------------------------------------------------------------------------------------------------
 }

@@ -8,6 +8,7 @@ public class Demo3 {
 //    accpet birth year
 //    calc age
 //    then display valid or not
+//---------------------------------------------------------------------------------------------------------------
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
@@ -21,5 +22,8 @@ public class Demo3 {
             System.out.println("Valid");
         }
         System.out.println("---------------End-------------");
+
+//---------------------------------------------------------------------------------------------------------------
+
     }
 }
