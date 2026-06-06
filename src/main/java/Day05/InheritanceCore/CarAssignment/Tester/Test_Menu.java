@@ -16,6 +16,7 @@ public class Test_Menu {
         System.out.println("2:BMW");
         System.out.println("3:Nano");
         System.out.println("4:Start Race");
+        System.out.println("5:Start Race");
 
         int ch ;
         int index =0 ;
@@ -59,11 +60,13 @@ public class Test_Menu {
                         }
                     }
                     break;
+                case 5:
+                    System.out.println("----BMW features----");
 
                 default:
                     System.out.println("-------Enter valid choice!-----");
             }
-        }while(ch!=4);
+        }while(ch!=6);
         System.out.println("-------END-------");
     }
 }

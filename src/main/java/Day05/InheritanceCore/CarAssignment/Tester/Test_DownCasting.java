@@ -42,12 +42,15 @@ public class Test_DownCasting {
         else if (obj instanceof Nano){
             Nano n  = (Nano) obj ;
             n.speed();
-            System.out.println("---DWN casted to BMW----");
+            System.out.println("---DWN casted to Nano----");
         }
         else if (obj instanceof BMW){
             BMW b = (BMW) obj ;
             b.abs();
             System.out.println("---DWN casted to BMW----");
+        }
+        else{
+            System.out.println("--cannot be down casted--");
         }
 
 //------------------------------------------------------------------------------------------------------------------
