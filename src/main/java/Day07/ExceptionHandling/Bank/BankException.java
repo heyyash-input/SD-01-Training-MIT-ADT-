@@ -3,10 +3,9 @@ package Day07.ExceptionHandling.Bank;
 public class BankException extends Exception {
 //---------------------------------------------------------------------------------------------------------------
 
-
-
     public BankException (String msg){
-        super(msg);
+        super(msg); // Constructor called for parent
     }
+
 //---------------------------------------------------------------------------------------------------------------
 }
