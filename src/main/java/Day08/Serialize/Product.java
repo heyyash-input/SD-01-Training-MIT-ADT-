@@ -1,7 +1,7 @@
 package Day08.Serialize;
 
 import java.io.Serializable;
-
+//POJO :
 public class Product implements Serializable {
 //-------------------------------------------------------------------------------------------------------------------
     private int prdsId ;

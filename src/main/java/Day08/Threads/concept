@@ -1,0 +1,16 @@
+ps v main () {
+
+
+
+MyMath.add (123.....);//
+MyMath.max(arr); //1000 double : get max // 10 sec
+serialise.saveData() //
+
+as we can see they are independant of each other unless
+}
+
+//--------------------------------------------------------------------------------------
+
+interview qn :- why threads are both extends and implements ??
+
+ans:-
