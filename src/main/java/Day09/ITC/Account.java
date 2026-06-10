@@ -21,7 +21,7 @@ public class Account {
                 '}';
     }
 //----------------------------------------------------------------------------------------------------------------
-    public  synchronized void deposite (double ammount ) throws InterruptedException {
+    public   void deposite (double ammount ) throws InterruptedException {
 
         Thread.sleep(2000);
         System.out.println("Deposite operation started by:" + Thread.currentThread()
@@ -39,7 +39,7 @@ public class Account {
                 .getName());
     }
 //----------------------------------------------------------------------------------------------------------------
-    public synchronized void withdraw ( double ammount ) throws InterruptedException {
+    public  void withdraw ( double ammount ) throws InterruptedException {
 
         Thread.sleep(1000);
         System.out.println("Withdraw operation started by:" + Thread.currentThread()
