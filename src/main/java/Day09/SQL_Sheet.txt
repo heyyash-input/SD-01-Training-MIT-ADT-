@@ -1,0 +1,407 @@
+===============================================================================
+                       THE DEFINITIVE SQL STUDY COMPANION
+===============================================================================
+A Complete, Zero-to-Advanced Guide to Structured Query Language for Reference
+===============================================================================
+
+-------------------------------------------------------------------------------
+MODULE 1: THE FOUNDATIONS (DATABASE ESSENTIALS & SINGLE-TABLE QUERIES)
+-------------------------------------------------------------------------------
+
+[1.1 DEFINITIONS & KEY CONCEPTS]
+
+* Database (DB): A structured collection of organized data stored and accessed 
+  electronically.
+
+* Relational Database Management System (RDBMS): Software that manages 
+  relational databases using tables, columns, rows, and relationships (keys).
+  Examples: PostgreSQL, MySQL, SQL Server, Oracle.
+
+* SQL (Structured Query Language): The standard declarative language used to 
+  interact with an RDBMS.
+
+* Table: A collection of related data entries consisting of columns and rows.
+
+* Column (Field): A vertical entity in a table containing specific attributes 
+  and data types (e.g., INT, VARCHAR, DATE).
+
+* Row (Record/Tuple): A horizontal entity representing a single, unique item 
+  in a table.
+
+* Primary Key (PK): A column (or set of columns) that uniquely identifies each 
+  row in a table. It cannot contain NULL values and must be unique.
+
+[1.2 THE BASIC SELECT STATEMENT]
+-- Fundamentals: Used to retrieve specific columns or entire rows from a table.
+-- Syntax & Examples:
+
+-- 1. Fetch specific columns
+SELECT employee_id, first_name, salary 
+FROM employees;
+
+-- 2. Fetch all columns using the asterisk (*) wildcard
+SELECT * FROM employees;
+
+-- 3. Alias column names for cleaner output using 'AS'
+SELECT first_name AS "First Name", salary * 12 AS "Annual Salary"
+FROM employees;
+
+-- 4. Get unique values, eliminating duplicates
+SELECT DISTINCT department_id 
+FROM employees;
+
+
+[1.3 FILTERING DATA WITH THE WHERE CLAUSE]
+-- Fundamentals: Extracts only those records that fulfill a specified condition.
+-- Syntax & Examples:
+
+-- 1. Exact match and numeric filtering
+SELECT * FROM employees 
+WHERE department_id = 5;
+
+-- 2. Comparison operators (>, <, >=, <=, != or <>)
+SELECT * FROM employees 
+WHERE salary >= 60000;
+
+-- 3. Logical Operators: AND (both true), OR (at least one true), NOT (inverts condition)
+SELECT * FROM employees 
+WHERE department_id = 5 AND salary > 50000;
+
+SELECT * FROM employees 
+WHERE department_id = 5 OR department_id = 10;
+
+
+[1.4 PATTERN MATCHING, RANGES & HANDLING NULLS]
+-- Fundamentals:
+--   - LIKE: Used for wildcard matching. '%' matches 0+ characters, '_' matches exactly 1.
+--   - IN: Allows specifying multiple values in a WHERE clause.
+--   - BETWEEN: Selects values within a given range (inclusive).
+--   - NULL: Represents missing or unknown data. Cannot use '=' for NULL; must use 'IS NULL'.
+
+-- 1. Wildcard match (Find employees whose names start with 'A')
+SELECT * FROM employees 
+WHERE first_name LIKE 'A%';
+
+-- 2. Wildcard match (Find employees with 'e' as the second character)
+SELECT * FROM employees 
+WHERE first_name LIKE '_e%';
+
+-- 3. List matching using IN
+SELECT * FROM employees 
+WHERE job_id IN ('IT_PROG', 'ST_CLERK', 'SA_REP');
+
+-- 4. Range matching using BETWEEN
+SELECT * FROM employees 
+WHERE salary BETWEEN 40000 AND 80000;
+
+-- 5. Checking for missing data (NULL)
+SELECT * FROM employees 
+WHERE manager_id IS NULL;
+
+-- 6. Checking for existing data (NOT NULL)
+SELECT * FROM employees 
+WHERE commission_pct IS NOT NULL;
+
+
+[1.5 SORTING & LIMITING RESULTS]
+-- Fundamentals:
+--   - ORDER BY: Sorts the result-set in ascending (ASC) or descending (DESC) order.
+--   - LIMIT / TOP / FETCH FIRST: Limits the number of records returned (syntax varies by DB).
+
+-- 1. Sorting ascending by default, then descending by salary on ties
+SELECT * FROM employees 
+ORDER BY department_id ASC, salary DESC;
+
+-- 2. Restricting result count (PostgreSQL / MySQL standard)
+SELECT * FROM employees 
+ORDER BY salary DESC 
+LIMIT 5;
+
+-- 3. Restricting result count (SQL Server / MS Access standard)
+-- SELECT TOP 5 * FROM employees ORDER BY salary DESC;
+
+
+-------------------------------------------------------------------------------
+MODULE 2: DATA AGGREGATION & RELATIONAL JOINS
+-------------------------------------------------------------------------------
+
+[2.1 DEFINITIONS & KEY CONCEPTS]
+* Aggregate Function: A function that performs a calculation on a set of values 
+  and returns a single value. It completely ignores NULL values (except COUNT(*)).
+
+* Grouping: The process of splitting data into logical buckets to calculate metrics 
+  per bucket.
+
+* Foreign Key (FK): A column (or columns) in one table that points to the Primary 
+  Key in another table. It establishes and enforces a link between the data.
+
+* Join: An operation used to combine rows from two or more tables based on a 
+  related column between them.
+
+[2.2 AGGREGATE FUNCTIONS]
+-- Fundamentals: Used to compute statistics across rows.
+
+-- 1. Count rows, sum values, find average, and locate extremes
+SELECT 
+    COUNT(*) AS total_employees,
+    SUM(salary) AS total_payroll,
+    AVG(salary) AS average_salary,
+    MIN(salary) AS lowest_salary,
+    MAX(salary) AS highest_salary
+FROM employees;
+
+
+[2.3 GROUP BY & HAVING CLAUSES]
+-- Fundamentals: 
+--   - GROUP BY groups rows that have the same values into summary rows.
+--   - WHERE filters rows *before* aggregation.
+--   - HAVING filters groups *after* aggregation has been performed.
+
+-- 1. Grouping data by department
+SELECT department_id, COUNT(*) AS num_employees, AVG(salary) AS avg_sal
+FROM employees
+GROUP BY department_id;
+
+-- 2. Filtering aggregated groups using HAVING
+SELECT department_id, AVG(salary) AS avg_sal
+FROM employees
+GROUP BY department_id
+HAVING AVG(salary) > 60000;
+
+-- 3. Combining WHERE, GROUP BY, and HAVING in execution order
+SELECT department_id, COUNT(*) AS count
+FROM employees
+WHERE salary > 30000              -- Step 1: Filter individual rows
+GROUP BY department_id            -- Step 2: Group rows
+HAVING COUNT(*) > 2               -- Step 3: Filter resulting groups
+ORDER BY count DESC;              -- Step 4: Sort final output
+
+
+[2.4 MULTI-TABLE JOINS]
+-- Fundamentals:
+--   - INNER JOIN: Returns records that have matching values in both tables.
+--   - LEFT JOIN (or OUTER): Returns all records from the left table, and the 
+--     matched records from the right table. Fill with NULLs if no match.
+--   - RIGHT JOIN (or OUTER): Returns all records from the right table, and the 
+--     matched records from the left table.
+--   - FULL JOIN (or OUTER): Returns all records when there is a match in either 
+--     left or right table.
+--   - CROSS JOIN: Returns the Cartesian product of the two tables (every row combined).
+
+-- 1. INNER JOIN: Match employees to their department names
+SELECT e.employee_id, e.first_name, d.department_name
+FROM employees e
+INNER JOIN departments d ON e.department_id = d.department_id;
+
+-- 2. LEFT JOIN: Keep all employees, even if they don't belong to a department
+SELECT e.first_name, d.department_name
+FROM employees e
+LEFT JOIN departments d ON e.department_id = d.department_id;
+
+-- 3. Self-Join: Joining a table to itself (e.g., finding an employee's manager)
+SELECT e.first_name AS "Employee", m.first_name AS "Manager"
+FROM employees e
+LEFT JOIN employees m ON e.manager_id = m.employee_id;
+
+
+[2.5 SET OPERATORS]
+-- Fundamentals: Used to combine the results of two separate queries into a single 
+-- result set. Both queries must have the same number of columns with matching data types.
+--   - UNION: Combines results and removes duplicate rows.
+--   - UNION ALL: Combines results but keeps all duplicate rows (faster).
+--   - INTERSECT: Returns rows common to both queries.
+--   - EXCEPT / MINUS: Returns rows from query 1 that are missing in query 2.
+
+-- 1. Combine lists without duplicates
+SELECT city FROM locations
+UNION
+SELECT city FROM departments;
+
+-- 2. Combine lists with duplicates included
+SELECT job_id FROM employees
+UNION ALL
+SELECT job_id FROM job_history;
+
+
+-------------------------------------------------------------------------------
+MODULE 3: SUBQUERIES, ADVANCED FUNCTIONS & DATA MODIFICATION
+-------------------------------------------------------------------------------
+
+[3.1 DEFINITIONS & KEY CONCEPTS]
+* Subquery: A query nested inside another query (the outer query).
+* Scalar Subquery: A subquery that returns exactly one row and one column (a single value).
+* Correlated Subquery: A subquery that references columns from the outer query. It 
+  executes once for each row processed by the outer query.
+* DML (Data Manipulation Language): SQL statements used to manage data within 
+  schema objects (INSERT, UPDATE, DELETE).
+
+[3.2 SUBQUERIES (NESTED QUERIES)]
+-- Fundamentals: Used to solve multi-step problems dynamically.
+
+-- 1. Scalar Subquery (Find employees earning more than the global average)
+SELECT first_name, salary
+FROM employees
+WHERE salary > (SELECT AVG(salary) FROM employees);
+
+-- 2. Multi-Row Subquery using IN (Find employees in certain locations)
+SELECT first_name, department_id
+FROM employees
+WHERE department_id IN (
+    SELECT department_id 
+    FROM departments 
+    WHERE location_id = 1700
+);
+
+-- 3. Correlated Subquery (Find employees earning more than their own department's average)
+SELECT e1.first_name, e1.salary, e1.department_id
+FROM employees e1
+WHERE e1.salary > (
+    SELECT AVG(e2.salary) 
+    FROM employees e2 
+    WHERE e2.department_id = e1.department_id
+);
+
+
+[3.3 DATA MODIFICATION (DML: INSERT, UPDATE, DELETE)]
+-- Fundamentals: Modifying rows within the database safely.
+
+-- 1. Inserting a single record
+INSERT INTO departments (department_id, department_name, manager_id, location_id)
+VALUES (280, 'Data Science', 100, 1700);
+
+-- 2. Updating specific records (CRITICAL: Always use a WHERE clause!)
+UPDATE employees
+SET salary = salary * 1.10
+WHERE job_id = 'IT_PROG';
+
+-- 3. Deleting specific records (CRITICAL: Always use a WHERE clause!)
+DELETE FROM employees
+WHERE employee_id = 207;
+
+-- 4. TRUNCATE vs DELETE: 
+--    DELETE removes rows one by one and logs each block (can be rolled back).
+--    TRUNCATE is a DDL command that wipes out all data in a table instantly 
+--    by deallocating data pages (faster, cannot be rolled back easily).
+-- TRUNCATE TABLE log_data;
+
+
+[3.4 BUILT-IN FUNCTIONS & CONDITIONAL LOGIC]
+-- Fundamentals: Formats data types on the fly and embeds logical branch processing.
+
+-- 1. String transformations
+SELECT CONCAT(first_name, ' ', last_name) AS full_name, UPPER(job_id)
+FROM employees;
+
+-- 2. Date manipulation (Extracting components)
+SELECT employee_id, hire_date, EXTRACT(YEAR FROM hire_date) AS hire_year
+FROM employees;
+
+-- 3. CASE WHEN: Implementing Conditional IF-THEN-ELSE logic inside queries
+SELECT first_name, salary,
+       CASE 
+           WHEN salary >= 10000 THEN 'High Tier'
+           WHEN salary BETWEEN 5000 AND 9999 THEN 'Mid Tier'
+           ELSE 'Entry Tier'
+       END AS salary_bracket
+FROM employees;
+
+
+-------------------------------------------------------------------------------
+MODULE 4: ADVANCED SQL & DATABASE DESIGN (THE PRO LEVEL)
+-------------------------------------------------------------------------------
+
+[4.1 DEFINITIONS & KEY CONCEPTS]
+* Window Function: Performs calculations across a set of table rows that are 
+  related to the current row, preserving individual row identities instead of 
+  collapsing them.
+
+* DDL (Data Definition Language): Statements used to define or modify the structure 
+  of database objects like tables and schemas (CREATE, ALTER, DROP).
+
+* Constraints: Rules enforced on data columns to ensure validity and reliability.
+
+* Normalization: The systematic process of structuring a database to reduce data 
+  redundancy and improve data integrity (1NF, 2NF, 3NF).
+
+* Index: A pointer structure used to speed up data retrieval operations on a table 
+  at the cost of additional storage and slower writes.
+
+* Transaction: A sequence of operations executed as a single, indivisible unit of work.
+
+* ACID Properties:
+    Atomicity (all or nothing), Consistency (valid state),
+    Isolation (independent runs), Durability (permanent logs).
+
+[4.2 WINDOW FUNCTIONS]
+-- Fundamentals: Uses the OVER() clause to slice and calculate running/ranked values.
+
+-- 1. Ranking employees within their respective departments
+SELECT department_id, first_name, salary,
+       ROW_NUMBER() OVER(PARTITION BY department_id ORDER BY salary DESC) AS row_num,
+       RANK() OVER(PARTITION BY department_id ORDER BY salary DESC) AS rnk,
+       DENSE_RANK() OVER(PARTITION BY department_id ORDER BY salary DESC) AS dense_rnk
+FROM employees;
+
+-- 2. Analytical offsets: Accessing historical rows directly without self-joins
+--    LEAD looks forward; LAG looks backward.
+SELECT employee_id, salary,
+       LAG(salary, 1) OVER(ORDER BY hire_date) AS previous_employee_salary,
+       LEAD(salary, 1) OVER(ORDER BY hire_date) AS next_employee_salary
+FROM employees;
+
+
+[4.3 DATABASE DESIGN & DDL (TABLE CREATION & CONSTRAINTS)]
+-- Fundamentals: Designing secure schemas with hard validation structures.
+
+-- 1. Building a new table from scratch with validation constraints
+CREATE TABLE students (
+    student_id INT PRIMARY KEY,                       -- Uniquely identifies rows, enforces index
+    first_name VARCHAR(50) NOT NULL,                  -- Rejects missing values
+    email VARCHAR(100) UNIQUE,                        -- Rejects duplicate emails
+    age INT CHECK (age >= 18),                        -- Validates business rules
+    enrollment_date DATE DEFAULT CURRENT_DATE         -- Automatically injects fallback value
+);
+
+-- 2. Altering an existing table structure
+ALTER TABLE students ADD phone_number VARCHAR(15);
+ALTER TABLE students DROP COLUMN age;
+
+
+[4.4 VIEWS & PERFORMANCE INDEXES]
+-- Fundamentals: Creating reusable abstractions and tuning latency.
+
+-- 1. Creating a VIEW (A stored virtual query that displays real-time table data)
+CREATE VIEW v_it_staff AS
+SELECT employee_id, first_name, email
+FROM employees
+WHERE job_id = 'IT_PROG';
+
+-- Querying the view exactly like a standard table:
+SELECT * FROM v_it_staff;
+
+-- 2. Creating an INDEX to speed up slow lookups on a frequently queried column
+CREATE INDEX idx_emp_last_name ON employees(last_name);
+
+
+[4.5 TRANSACTIONS & ACID CONCURRENCY MANAGEMENT]
+-- Fundamentals: Bundling multiple queries into a secure, transactional block.
+
+-- 1. Example of a banking money transfer transaction block
+BEGIN TRANSACTION;  -- Or START TRANSACTION; depending on the RDBMS
+
+UPDATE accounts 
+SET balance = balance - 500 
+WHERE account_id = 101;
+
+UPDATE accounts 
+SET balance = balance + 500 
+WHERE account_id = 102;
+
+-- Check if any system constraint or logic failed:
+-- If an error happened: ROLLBACK;
+-- If everything succeeded perfectly:
+COMMIT;
+
+===============================================================================
+               [END OF SQL MASTERCOMPANION REFERENCE FILE]
+===============================================================================

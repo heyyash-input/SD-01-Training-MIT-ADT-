@@ -13,4 +13,4 @@ as we can see they are independant of each other unless
 
 interview qn :- why threads are both extends and implements ??
 
-ans:-
+ans:- Many methods implement extend or impelemnt already

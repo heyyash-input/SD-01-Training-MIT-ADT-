@@ -10,6 +10,7 @@ public class MyThread implements Runnable {
         for (int i = 0; i <= 20 ; i++) {
             System.out.println(i);
             try {
+                //.sleep:- Think of Thread.sleep() like putting a thread to bed, and InterruptedException as an alarm clock.
                 Thread1.sleep(1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);

@@ -1,0 +1,17 @@
+ITC - Inter Thread Communication
+
+Account : act : 101 , ram , 5000
+
+withdarw (7000)-------->5000 - 7000: -2000
+(if bal < account then wait for some deposite to occur )
+
+deposite(3000)------------>-2000 + 3000:X
+( if deposite occur then notify All waiting threading
+
+use methode ---> wait() , notify() -----> ALL these are the methode of Object class
+specially used for ITC
+
+Interview questions:-
+Ans:can we override these wait and notify mehtod in child class : NO
+why: wait , notify are final methods
+

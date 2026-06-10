@@ -1,4 +1,4 @@
-package Day08.Serialize;
+package Day08.SerializeAndDeserialize;
 
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;

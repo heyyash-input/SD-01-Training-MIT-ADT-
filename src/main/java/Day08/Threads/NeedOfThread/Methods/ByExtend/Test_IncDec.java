@@ -9,6 +9,9 @@ public class Test_IncDec {
         t1.setName("Increment Thread");
         t1.start();
 
+//        Thread obj = new Thread(t1) ;
+//        obj.start();
+
         Thread2 t2 = new Thread2();
         t2.setName("Decrement Thread");
         t2.start();
