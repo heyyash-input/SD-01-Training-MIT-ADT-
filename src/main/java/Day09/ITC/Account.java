@@ -21,29 +21,41 @@ public class Account {
                 '}';
     }
 //----------------------------------------------------------------------------------------------------------------
-    public  synchronized void deposite (double ammount ){
+    public  synchronized void deposite (double ammount ) throws InterruptedException {
+
+        Thread.sleep(2000);
         System.out.println("Deposite operation started by:" + Thread.currentThread()
                 .getName());
+
+//        //notify all waiting threads -----> this.notify();
+        this.notify(); // as soon as deposite is completed then notify
+
         balance += ammount ;
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("Deposite operation started by:" + balance + Thread.currentThread()
+
+        Thread.sleep(2000);
+        System.out.println("After deposite: " + balance );
+
+        System.out.println("Deposite operation Ended by:" + balance + Thread.currentThread()
                 .getName());
     }
 //----------------------------------------------------------------------------------------------------------------
-    public synchronized void withdraw ( double ammount ){
+    public synchronized void withdraw ( double ammount ) throws InterruptedException {
+
+        Thread.sleep(1000);
         System.out.println("Withdraw operation started by:" + Thread.currentThread()
                 .getName());
-        balance -= ammount ;
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+
+//        // to make wait
+        if (balance < ammount){
+            System.out.println("-----waiting for some deposite to occur----");
+            this.wait();
         }
-        System.out.println("Withdraw operation started by:" + balance + Thread.currentThread()
+
+        balance -= ammount ;
+            Thread.sleep(2000);
+        System.out.println("After Withdraw: " + balance);
+
+        System.out.println("Withdraw operation Ended by:" + balance + Thread.currentThread()
                 .getName());
 
     }
